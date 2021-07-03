@@ -1,0 +1,48 @@
+{{> menu id="dashboard"}}
+
+<section class="ui raised segment">
+  <header class="ui header">
+    Latest Weather
+  </header>
+  {{> reading-table}}
+</section>
+
+<form class="ui stacked segment form" action="/dashboard/addreport" method="POST">
+  <div class="two fields">
+    <div class="field">
+      <label>Latitude</label> <input value="52.160858" type="text" name="lat">
+    </div>
+    <div class="field">
+      <label>Longitude</label> <input value="-7.152420" type="text" name="lng">
+    </div>
+  </div>
+  <button class="ui blue submit button">Add Report</button>
+</form>
+<div class="ui segment" id="chart"></div>
+
+<script>
+  const data = {
+    labels: [
+      {{#each reading.trendLabels}}
+        "{{this}}",
+      {{/each}}
+    ],
+    datasets: [
+      {
+        name: "Temperature", type: "line",
+        values: [
+          {{#each reading.tempTrend}}
+            {{this}},
+          {{/each}}
+        ]
+      }
+    ]
+  }
+
+  const chart = new frappe.Chart("#chart", {
+    title: "Temperature Trend",
+    data: data,
+    type: 'line',
+    height: 250,
+  })
+</script>
